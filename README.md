@@ -1,38 +1,94 @@
-Preditor de Sucesso Cinematográfico (PSC)
-Instituição: FATEC Mauá
+# Preditor de Sucesso Cinematográfico (PSC)
 
-Curso: Desenvolvimento de Software Multiplataforma
+Projeto acadêmico da FATEC Mauá para explorar o uso de aprendizado de máquina na classificação do potencial de sucesso financeiro de filmes.
 
-Disciplina: MAQ-024 — Aprendizagem de Máquina
+## Sobre o projeto
 
-Professor: Bruno Zolotareff dos Santos
-Integrantes
-Marco Aurelio Dias Torres Machado
-Mauro Luiz dos Santos Junior
-Vitor Aletto D'Andrea
-Gabriel Menezes da Silva
-Enzo Luz Granato Barbosa
-1. Objetivo e problema
-O projeto tem como objetivo desenvolver um modelo de Machine Learning para classificar filmes de acordo com seu potencial de sucesso financeiro. A proposta aborda a incerteza envolvida no desempenho comercial de produções cinematográficas e investiga como dados históricos podem apoiar essa análise.
-Para o MVP, um filme é considerado sucesso quando sua bilheteria registrada na base do TMDB é igual ou superior a duas vezes seu orçamento de produção:
-Sucesso = bilheteria ≥ 2 × orçamento
-O modelo recebe características disponíveis na base de dados, como ano de lançamento, duração, orçamento, gêneros, participação em franquia e informações relacionadas à frequência de aparição do diretor e do roteirista na amostra.
-2. Solução e funcionamento do MVP
-O MVP é desenvolvido em Python, no Google Colab. O código carrega a base pública de filmes da UCSB, seleciona os registros classificados como filmes e consulta a API do TMDB para obter orçamento, bilheteria, informação de franquia, diretor e roteirista. Os dados enriquecidos são salvos em um arquivo CSV de cache para evitar repetir as consultas em execuções posteriores no mesmo ambiente.
-Na preparação dos dados, o código remove registros com orçamento ou bilheteria inferiores ou iguais a mil. Em seguida, cria a variável de sucesso conforme o critério definido. Os gêneros são convertidos em variáveis indicadoras, e as informações de diretor e roteirista são representadas pela frequência com que aparecem na amostra.
-O modelo utilizado nesta versão é o XGBoost Classifier, configurado com 200 estimadores, taxa de aprendizado de 0,05 e profundidade máxima de 5. O conjunto de dados é ordenado pelo ano de lançamento e dividido cronologicamente: os primeiros 80% são usados no treinamento e os 20% finais, no teste.
-A avaliação é feita por meio de acurácia, precisão, recall, F1-score e matriz de confusão. Na implementação atual, o modelo retorna uma classificação — sucesso ou não sucesso — e não uma probabilidade individual para cada filme.
-3. Base de dados e ferramentas
-Base inicial: Streaming Dataset — UCSB
-Enriquecimento: API do TMDB
-Ambiente: Google Colab
-Linguagem: Python
-Bibliotecas principais: XGBoost, pandas, NumPy, requests, tqdm e scikit-learn
-Notebook do MVP: Preditor de bilheteria — Google Colab
-4. Limitações e próximos ajustes
-O código atual deve ser entendido como um MVP experimental. A busca no TMDB usa o título e o ano para localizar o filme e seleciona o primeiro resultado encontrado, o que pode associar alguns registros ao filme errado. Além disso, as frequências de diretores e roteiristas são calculadas antes da divisão entre treino e teste, usando toda a amostra. Isso pode introduzir informação dos dados de teste no treinamento e comprometer a avaliação cronológica. Para reduzir esse risco, essas frequências devem ser calculadas usando somente os dados de treino e aplicadas ao conjunto de teste sem consultar seus registros futuros.
-A descrição do projeto também deve refletir que o Random Forest “from scratch”, a comparação com um baseline separado, a extração de importância das variáveis e a previsão probabilística não fazem parte do código atual. Esses itens podem ser apresentados como possíveis evoluções, caso sejam implementados posteriormente.
-5. Referências
-University of California, Santa Barbara. Streaming Dataset — OpenRefine. [Acessar](https://rds.library.ucsb.edu/openrefine/dataset.html)
-The Movie Database (TMDB). Documentação da API. [Acessar](https://developer.themoviedb.org/docs/search-and-query-for-details)
-XGBoost. Documentação oficial. [Acessar](https://xgboost.readthedocs.io/en/stable/)
+A indústria cinematográfica envolve incerteza financeira: uma produção pode exigir um investimento elevado sem recuperar seus custos nas bilheterias. Este projeto investiga como dados históricos podem ajudar a classificar filmes de acordo com seu desempenho comercial.
+
+Para o MVP, um filme é considerado **sucesso** quando a bilheteria registrada no TMDB é igual ou superior a duas vezes seu orçamento de produção:
+
+```text
+Sucesso = bilheteria >= 2 * orçamento
+```
+
+O resultado produzido pela implementação atual é uma classificação entre sucesso e não sucesso. O modelo ainda não calcula uma probabilidade individual de sucesso.
+
+## Instituição e equipe
+
+- **Instituição:** FATEC Mauá
+- **Curso:** Desenvolvimento de Software Multiplataforma
+- **Disciplina:** MAQ-024 — Aprendizagem de Máquina
+- **Professor:** Bruno Zolotareff dos Santos
+
+### Integrantes
+
+- Marco Aurelio Dias Torres Machado
+- Mauro Luiz dos Santos Junior
+- Vitor Aletto D'Andrea
+- Gabriel Menezes da Silva
+- Enzo Luz Granato Barbosa
+
+## MVP
+
+O notebook é desenvolvido em Python no Google Colab. O processo implementado consiste em:
+
+1. Carregar a base pública de filmes da UCSB e selecionar os registros classificados como filmes.
+2. Consultar a API do TMDB para obter orçamento, bilheteria, indicação de franquia, diretor e roteirista.
+3. Salvar os dados enriquecidos em um arquivo CSV de cache para reaproveitá-los em execuções posteriores no mesmo ambiente.
+4. Remover registros com orçamento ou bilheteria inferiores ou iguais a mil.
+5. Criar o rótulo de sucesso conforme o critério de bilheteria igual ou superior a duas vezes o orçamento.
+6. Preparar as variáveis: converter gêneros em indicadores e representar diretor e roteirista pela frequência com que aparecem na amostra.
+7. Ordenar os dados pelo ano de lançamento e separar os primeiros 80% para treinamento e os 20% finais para teste.
+8. Treinar e avaliar um classificador XGBoost.
+
+### Variáveis utilizadas
+
+O conjunto de entrada do modelo inclui:
+
+- Ano de lançamento;
+- Duração;
+- Orçamento;
+- Indicador de participação em franquia;
+- Frequência do diretor na amostra;
+- Frequência do roteirista na amostra;
+- Gêneros do filme, convertidos em variáveis indicadoras.
+
+A bilheteria é usada para definir o rótulo de sucesso e não é incluída como variável de entrada do modelo.
+
+### Modelo e avaliação
+
+O notebook utiliza `XGBClassifier` com os seguintes parâmetros:
+
+- `n_estimators=200`;
+- `learning_rate=0.05`;
+- `max_depth=5`;
+- `eval_metric="logloss"`;
+- `random_state=42`.
+
+O desempenho é avaliado por acurácia, precisão, recall, F1-score e matriz de confusão, usando métricas do scikit-learn.
+
+## Base de dados e ferramentas
+
+- **Base inicial:** [Streaming Dataset — UCSB](https://rds.library.ucsb.edu/openrefine/data/master-streaming-messy.csv )
+- **Dados complementares:** [API do TMDB](https://developer.themoviedb.org/docs/search-and-query-for-details )
+- **Ambiente:** [Google Colab](https://colab.research.google.com/drive/1S5zEBn07JCIFQNeFW0HPfR4BqAwVWyfd?usp=sharing )
+- **Linguagem:** Python
+- **Bibliotecas:** XGBoost, scikit-learn, pandas, NumPy, requests e tqdm
+
+## Limitações conhecidas
+
+- A correspondência de filmes no TMDB é feita com título e ano, e o código usa o primeiro resultado da busca. Portanto, alguns registros podem ser associados a um filme incorreto.
+- As frequências de diretores e roteiristas são calculadas antes da divisão entre treino e teste, considerando toda a amostra. Isso pode introduzir vazamento de informação. Uma versão futura deve calcular essas frequências apenas no conjunto de treino e aplicar o mapeamento ao conjunto de teste.
+- A divisão cronológica ordena os registros pelo ano de lançamento, mas pode separar filmes do mesmo ano entre treino e teste.
+- O modelo atual não implementa Random Forest do zero, comparação com um baseline separado, importância das variáveis nem classificação probabilística.
+- O critério de sucesso é uma simplificação baseada na relação entre bilheteria e orçamento. Ele não inclui outros custos, como marketing, distribuição ou participação de exibidores.
+- Valores ausentes, incorretos ou indisponíveis na base da UCSB ou na API do TMDB podem afetar os resultados.
+
+
+## Referências
+
+1. University of California, Santa Barbara. [Streaming Dataset — OpenRefine](https://rds.library.ucsb.edu/openrefine/dataset.html ).
+2. The Movie Database (TMDB). [Documentação da API](https://developer.themoviedb.org/docs/search-and-query-for-details ).
+3. XGBoost. [Documentação oficial](https://xgboost.readthedocs.io/en/stable/ ).
+4. Breiman, L. (2001). [Random Forests](https://doi.org/10.1023/A:1010933404324 ). *Machine Learning*, 45, 5–32. Referência de contexto sobre métodos de ensemble; o notebook atual não implementa Random Forest.
