@@ -72,7 +72,7 @@ O desempenho é avaliado por acurácia, precisão, recall, F1-score e matriz de 
 
 - **Base inicial:** [Streaming Dataset — UCSB](https://rds.library.ucsb.edu/openrefine/data/master-streaming-messy.csv )
 - **Dados complementares:** [API do TMDB](https://developer.themoviedb.org/docs/search-and-query-for-details )
-- **Ambiente:** [Google Colab](https://colab.research.google.com/drive/1S5zEBn07JCIFQNeFW0HPfR4BqAwVWyfd?usp=sharing )
+- **Ambiente:** [Google Colab](https://colab.research.google.com/drive/1WPqqDX0WjQaHrtDNe6I4coG7tSbwtc3r?usp=sharing)
 - **Linguagem:** Python
 - **Bibliotecas:** XGBoost, scikit-learn, pandas, NumPy, requests e tqdm
 
