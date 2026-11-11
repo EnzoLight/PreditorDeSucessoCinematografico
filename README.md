@@ -92,3 +92,29 @@ O desempenho é avaliado por acurácia, precisão, recall, F1-score e matriz de 
 2. The Movie Database (TMDB). [Documentação da API](https://developer.themoviedb.org/docs/search-and-query-for-details ).
 3. XGBoost. [Documentação oficial](https://xgboost.readthedocs.io/en/stable/ ).
 4. Breiman, L. (2001). [Random Forests](https://doi.org/10.1023/A:1010933404324 ). *Machine Learning*, 45, 5–32. Referência de contexto sobre métodos de ensemble; o notebook atual não implementa Random Forest.
+
+## Implementação alternativa: NumPy + chat com Ollama
+
+Esta implementação nova foi adicionada como uma alternativa didática ao MVP original descrito acima. **O README histórico e os arquivos de dados existentes foram mantidos**: o código original baseado em XGBoost/scikit-learn não foi substituído por esta versão.
+
+### Arquivos adicionados
+
+- `preditor_sucesso.py`: preditor por regressão logística implementada com NumPy; usa pandas para carregar/preparar a base, sem scikit-learn no treinamento ou nas métricas.
+- `PreditorSucessoCinematografico_Ollama.ipynb`: notebook para Colab que instala e inicia Ollama, baixa `lfm3:1.7b`, executa treinamento e conecta um chat local.
+- `requirements.txt`: dependências Python da nova implementação.
+- `tests/test_preditor_sucesso.py`: testes do treinamento, métricas, validação, extração e roteamento de conversa.
+
+O critério de sucesso continua sendo `revenue >= 2 * budget`; é uma simplificação e não significa lucro. A nova versão faz divisão cronológica por anos, aprende transformações apenas no treino e reporta métricas no teste mais recente. As probabilidades não são calibradas e não garantem resultados futuros.
+
+### Executar a alternativa no Colab
+
+Abra `PreditorSucessoCinematografico_Ollama.ipynb` e rode as células em ordem. Na etapa de upload, envie `base_enriquecida_tmdb.csv` e `preditor_sucesso.py`. O notebook baixa o modelo local `lfm3:1.7b` (aproximadamente 1,1 GB); recomenda-se uma sessão Colab com GPU. Não é necessário compartilhar uma chave de API.
+
+O chat usa a LLM para interpretar os dados e conversar, mas somente o código Python valida os campos e calcula a previsão. Conversas e dúvidas sobre resultados não devem alterar a estimativa já calculada.
+
+Para verificar o código localmente:
+
+```bash
+python -m pip install -r requirements.txt
+python -m unittest discover -s tests -v
+```
